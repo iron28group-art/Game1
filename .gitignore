@@ -1,0 +1,36 @@
+# Unity
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+*.csproj
+*.sln
+*.suo
+*.user
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+.vs/
+.idea/
+*.apk
+*.aab
+crashlytics-build.properties
+
+# Python
+__pycache__/
+*.pyc
+
+# 승인 대기/거절 이미지는 커밋하지 않음 (승인본만 Assets/Resources/Art 로 들어감)
+/art/pending/*
+!/art/pending/.gitkeep
+/art/rejected/*
+!/art/rejected/.gitkeep
+.env

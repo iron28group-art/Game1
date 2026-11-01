@@ -1,0 +1,89 @@
+{
+  "kie": {
+    "model": "nano-banana-2",
+    "input_defaults": {
+      "output_format": "png"
+    },
+    "_note": "model 이름과 input 필드는 kie.ai 문서(https://docs.kie.ai) 기준 확인 필요. 바꾸려면 여기만 수정."
+  },
+  "style": "cute storybook fantasy illustration, soft pastel colors, clean bold outlines, gentle cel shading, mobile casual game art, consistent style",
+  "assets": [
+    {
+      "id": "bg_meadow",
+      "name_ko": "배경 - 요정의 들판",
+      "aspect_ratio": "9:16",
+      "prompt": "vertical mobile game background, magical meadow at the edge of an enchanted forest, soft blue sky with fluffy clouds, gentle rolling green hills, scattered tiny glowing flowers, empty open space in the center-bottom for a tree, no characters, no text",
+      "status": "prompt_draft"
+    },
+    {
+      "id": "tree_stage_0",
+      "name_ko": "나무 1단계 - 씨앗",
+      "aspect_ratio": "1:1",
+      "prompt": "a single magical seed glowing faintly, sitting on a small mound of soil, tiny sparkles, centered, isolated on plain white background, game sprite, no text",
+      "status": "prompt_draft"
+    },
+    {
+      "id": "tree_stage_1",
+      "name_ko": "나무 2단계 - 새싹",
+      "aspect_ratio": "1:1",
+      "prompt": "a tiny cute sprout with two round leaves growing from a small mound of soil, faint magical glow, centered, isolated on plain white background, game sprite, no text",
+      "status": "prompt_draft"
+    },
+    {
+      "id": "tree_stage_2",
+      "name_ko": "나무 3단계 - 어린 나무",
+      "aspect_ratio": "1:1",
+      "prompt": "a young sapling tree with a thin trunk and a small round leafy crown, light green leaves, a few sparkles, standing on a small grass mound, centered, isolated on plain white background, game sprite, no text",
+      "status": "prompt_draft"
+    },
+    {
+      "id": "tree_stage_3",
+      "name_ko": "나무 4단계 - 큰 나무",
+      "aspect_ratio": "1:1",
+      "prompt": "a big healthy tree with a sturdy trunk and a full round lush green crown, subtle magical glow between leaves, standing on a grass mound, centered, isolated on plain white background, game sprite, no text",
+      "status": "prompt_draft"
+    },
+    {
+      "id": "tree_stage_4",
+      "name_ko": "나무 5단계 - 요술나무",
+      "aspect_ratio": "1:1",
+      "prompt": "a majestic magical wish tree with a twisting trunk, glowing lavender and teal leaves, floating light orbs and sparkles around the crown, tiny fairy lights, standing on a grass mound, centered, isolated on plain white background, game sprite, no text",
+      "status": "prompt_draft"
+    },
+    {
+      "id": "fruit_magic",
+      "name_ko": "요술 열매",
+      "aspect_ratio": "1:1",
+      "prompt": "a single shiny magical fruit, round, pink and gold gradient, small leaf on top, soft glow and sparkles, centered, isolated on plain white background, game item icon, no text",
+      "status": "prompt_draft"
+    },
+    {
+      "id": "icon_mana",
+      "name_ko": "아이콘 - 마나 이슬",
+      "aspect_ratio": "1:1",
+      "prompt": "a single glowing blue magic dew drop, crystal clear with a sparkle highlight, centered, isolated on plain white background, game currency icon, no text",
+      "status": "prompt_draft"
+    },
+    {
+      "id": "icon_watering_can",
+      "name_ko": "아이콘 - 물뿌리개",
+      "aspect_ratio": "1:1",
+      "prompt": "a cute small watering can pouring sparkling magical water, mint green color, centered, isolated on plain white background, game upgrade icon, no text",
+      "status": "prompt_draft"
+    },
+    {
+      "id": "icon_fairy",
+      "name_ko": "아이콘 - 요정 친구",
+      "aspect_ratio": "1:1",
+      "prompt": "a tiny friendly glowing forest fairy with translucent wings, chibi proportions, holding a little dew drop, centered, isolated on plain white background, game upgrade icon, no text",
+      "status": "prompt_draft"
+    },
+    {
+      "id": "icon_sunlight",
+      "name_ko": "아이콘 - 햇살",
+      "aspect_ratio": "1:1",
+      "prompt": "a cute smiling sun with soft warm golden rays, centered, isolated on plain white background, game upgrade icon, no text",
+      "status": "prompt_draft"
+    }
+  ]
+}
