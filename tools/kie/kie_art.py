@@ -15,6 +15,7 @@
   python3 tools/kie/kie_art.py approve-prompt tree_stage_0 tree_stage_1   # 또는 all
   python3 tools/kie/kie_art.py generate tree_stage_0 --variants 2
   python3 tools/kie/kie_art.py generate tree_stage_0 --model <모델ID> --set resolution=1K   # 이번만 다른 모델
+  python3 tools/kie/kie_art.py generate tori_run --ref char_tori        # 승인된 그림을 참고(같은 캐릭터 유지)
   python3 tools/kie/kie_art.py approve tree_stage_0 2                     # 2번 후보 채택
   python3 tools/kie/kie_art.py reject tree_stage_0
   python3 tools/kie/kie_art.py bounds                                     # art_bounds.txt 다시 계산
@@ -35,6 +36,8 @@ import urllib.request
 from pathlib import Path
 
 BASE = os.environ.get("KIE_API_BASE", "https://api.kie.ai/api/v1")
+UPLOAD_BASE = os.environ.get("KIE_UPLOAD_BASE", "https://kieai.redpandaai.co")  # 파일 업로드 (24시간 보관)
+REF_MODEL = "gpt-image-2-5-sunburst-image-to-image"                          # --ref 사용 시 기본 모델
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = ROOT / "art" / "manifest.json"
 PENDING = ROOT / "art" / "pending"
@@ -82,6 +85,32 @@ def api(method, path, body=None):
     if payload.get("code") not in (200, None):
         sys.exit(f"kie.ai 오류 code={payload.get('code')} msg={payload.get('msg')}")
     return payload.get("data") or {}
+
+
+def upload_png(path):
+    """승인 이미지를 kie 파일 업로드 API 에 올리고 다운로드 URL 을 돌려준다 (24시간 뒤 삭제됨)."""
+    key = os.environ.get("KIE_API_KEY")
+    if not key:
+        sys.exit("KIE_API_KEY 환경변수가 없습니다.")
+    boundary = "----kieart" + str(int(time.time() * 1000))
+    parts = []
+    for name, value in (("uploadPath", "images/magic-tree"), ("fileName", path.name)):
+        parts.append(f'--{boundary}\r\nContent-Disposition: form-data; name="{name}"\r\n\r\n{value}\r\n'.encode())
+    parts.append((f'--{boundary}\r\nContent-Disposition: form-data; name="file"; filename="{path.name}"\r\n'
+                  'Content-Type: image/png\r\n\r\n').encode() + path.read_bytes() + b"\r\n")
+    parts.append(f"--{boundary}--\r\n".encode())
+    req = urllib.request.Request(UPLOAD_BASE + "/api/file-stream-upload", data=b"".join(parts), method="POST",
+                                 headers={"Authorization": f"Bearer {key}",
+                                          "Content-Type": f"multipart/form-data; boundary={boundary}"})
+    try:
+        with urllib.request.urlopen(req, timeout=120) as r:
+            payload = json.loads(r.read().decode())
+    except urllib.error.HTTPError as e:
+        sys.exit(f"업로드 실패 HTTP {e.code}: {e.read().decode(errors='replace')[:300]}")
+    url = (payload.get("data") or {}).get("downloadUrl")
+    if not url:
+        sys.exit(f"업로드 응답에 downloadUrl 없음: code={payload.get('code')} msg={payload.get('msg')}")
+    return url
 
 
 def create_task(m, asset, model=None, extra=None):
@@ -183,6 +212,18 @@ def cmd_generate(args):
     PENDING.mkdir(parents=True, exist_ok=True)
     n0 = len(candidates(args.id))
     extra = {}
+    if args.ref:
+        refs = []
+        for rid in args.ref:
+            png = APPROVED / f"{rid}.png"
+            if not png.exists():
+                sys.exit(f"--ref 는 승인된 이미지여야 합니다: {png.relative_to(ROOT)} 없음")
+            refs.append(upload_png(png))
+            print(f"참고 이미지 업로드: {rid}")
+        extra["input_urls"] = refs
+        if not args.model:
+            args.model = REF_MODEL
+            extra.update({k: v for k, v in load().get("kie", {}).get("input_defaults", {}).items() if k not in extra})
     for kv in args.set or []:
         k, sep, v = kv.partition("=")
         if not sep:
@@ -240,6 +281,7 @@ def main():
     s = sub.add_parser("approve-prompt"); s.add_argument("ids", nargs="+"); s.set_defaults(fn=cmd_approve_prompt)
     s = sub.add_parser("generate"); s.add_argument("id"); s.add_argument("--variants", type=int, default=2)
     s.add_argument("--model", help="이번 생성에만 쓸 kie 모델 ID (manifest 기본값은 그대로)")
+    s.add_argument("--ref", action="append", metavar="ASSET_ID", help="승인된 이미지를 참고 이미지로 사용 (이미지→이미지, 여러 번 가능)")
     s.add_argument("--set", action="append", metavar="KEY=VALUE", help="input 필드 추가/덮어쓰기 (여러 번 가능)")
     s.set_defaults(fn=cmd_generate)
     s = sub.add_parser("approve"); s.add_argument("id"); s.add_argument("variant", type=int); s.set_defaults(fn=cmd_approve)

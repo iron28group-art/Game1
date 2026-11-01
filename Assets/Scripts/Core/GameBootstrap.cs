@@ -8,10 +8,14 @@ namespace MagicTree
     /// </summary>
     public static class GameBootstrap
     {
+        /// <summary>true 면 예전 '요술나무 키우기'(방치형 클리커), false 면 '요술나무 오르기'(등반 액션).</summary>
+        public static bool UseIdleGame = false;
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void Boot()
         {
             if (Object.FindFirstObjectByType<MagicTreeGame>() != null) return;
+            if (Object.FindFirstObjectByType<Climb.ClimbGame>() != null) return;
 
             if (Camera.main == null)
             {
@@ -23,8 +27,9 @@ namespace MagicTree
             }
 
             Application.targetFrameRate = 60;
-            var go = new GameObject("MagicTreeGame");
-            go.AddComponent<MagicTreeGame>();
+            var go = new GameObject(UseIdleGame ? "MagicTreeGame" : "ClimbGame");
+            if (UseIdleGame) go.AddComponent<MagicTreeGame>();
+            else go.AddComponent<Climb.ClimbGame>();
             Object.DontDestroyOnLoad(go);
         }
     }

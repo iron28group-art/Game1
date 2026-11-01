@@ -2,7 +2,14 @@
 
 Unity로 만드는 방치형 클리커 게임 프로토타입입니다.
 
-## 게임 개요
+## 지금 기본 게임: 요술나무 오르기 (등반 액션)
+- 꼬마 **토리**가 요술나무 꼭대기의 별 열매를 찾아 위로 올라가는 세로 화면 액션 게임입니다. 기획: `docs/climb_design.md`
+- 조작: 왼쪽 아래 ◀ ▶, 오른쪽 아래 **점프**, 덩굴 근처에서 ▲ ▼ (PC: 방향키/WASD + Space)
+- 발판·덩굴·통통 버섯·솔방울·애벌레·꽃가루 바람이 높이에 따라 자동으로 생성됩니다. 50m마다 화면 폭 전체의 **반딧불 쉼터**가 있어서, 떨어져도 거기서 멈추고 다음에 그 쉼터부터 이어 합니다.
+- 수치: `Assets/Scripts/Climb/ClimbConfig.cs`. 수치를 바꾸면 `python3 tools/sim/climb_check.py`로 모든 발판이 점프로 닿는지 확인하세요(같은 규칙을 Python으로 옮긴 시뮬레이션).
+- 예전 '요술나무 키우기'(방치형)는 `GameBootstrap.UseIdleGame = true`로 다시 켤 수 있습니다.
+
+## 게임 개요 (요술나무 키우기 — 이전 프로토타입)
 - 나무를 **터치**해서 마나 이슬을 모읍니다.
 - 누적 마나에 따라 나무가 **씨앗 → 새싹 → 어린 나무 → 큰 나무 → 요술나무**로 자랍니다.
 - 어린 나무부터 **요술 열매**가 열리고, 열매를 터치하면 터치 10번만큼의 보너스를 받습니다.
@@ -34,6 +41,7 @@ python3 tools/kie/kie_art.py approve-prompt tree_stage_0 # 프롬프트 승인
 python3 tools/kie/kie_art.py generate tree_stage_0       # 후보 2장 생성 → art/pending/
 python3 tools/kie/kie_art.py approve tree_stage_0 1      # 1번 후보 채택 → Assets/Resources/Art/
 python3 tools/kie/kie_art.py reject tree_stage_0         # 전부 거절
+python3 tools/kie/kie_art.py generate tori_run --ref char_tori   # 승인 그림을 참고해 같은 캐릭터 유지(이미지→이미지)
 ```
 
 - 승인된 이미지는 `Assets/Resources/Art/{id}.png`에 들어가고, 게임이 자동으로 읽습니다.
