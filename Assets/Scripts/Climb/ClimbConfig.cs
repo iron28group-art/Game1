@@ -43,6 +43,7 @@ namespace MagicTree.Climb
         public const float PlatformThickness = 0.35f;
         public const float VineGapHeight = 4.4f;     // 덩굴/버섯 구간의 높이
         public const float CheckpointEvery = 50f;    // m
+        public const float GoalHeight = 500f;        // 별 열매가 있는 꼭대기 쉼터 (CheckpointEvery 의 배수). 그 뒤로도 계속 오를 수 있음
         public const float GenerateAhead = 30f;      // 카메라 위로 미리 만들어 둘 높이
         public const float CleanupBelow = 25f;       // 체크포인트보다 이만큼 아래는 지움
 

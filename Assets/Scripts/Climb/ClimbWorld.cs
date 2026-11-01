@@ -9,6 +9,7 @@ namespace MagicTree.Climb
     {
         public float X, Y, Width;         // X = 가운데, Y = 밟는 면 높이
         public bool IsCheckpoint;
+        public bool IsGoal;               // 별 열매 쉼터
         public float Left => X - Width * 0.5f;
         public float Right => X + Width * 0.5f;
     }
@@ -68,6 +69,7 @@ namespace MagicTree.Climb
         public event Action Jumped, Landed, Bounced, Hit;
         public event Action<Dew> DewCollected;
         public event Action<float> CheckpointReached;
+        public event Action GoalReached;
         public event Action<Platform> PlatformAdded;   // 새로 생긴 것들은 그림 쪽에서 목록을 다시 훑는다
 
         readonly System.Random _rng;
@@ -129,6 +131,7 @@ namespace MagicTree.Climb
                 {
                     // 반딧불 쉼터: 화면 폭 전체 가지 → 떨어져도 여기서 멈춘다
                     _last = AddPlatform(0f, _nextCheckpointY, C.HalfPlayWidth * 2f + 1f, checkpoint: true);
+                    _last.IsGoal = Mathf.Abs(_nextCheckpointY - C.GoalHeight) < 0.01f;
                     _nextRowY = _nextCheckpointY + Gap(_nextCheckpointY);
                     _nextCheckpointY += C.CheckpointEvery;
                     _rowsSinceSpecial = 0;
@@ -346,6 +349,7 @@ namespace MagicTree.Climb
             {
                 CheckpointHeight = p.Y;
                 CheckpointReached?.Invoke(p.Y);
+                if (p.IsGoal) GoalReached?.Invoke();
             }
         }
 

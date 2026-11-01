@@ -28,7 +28,7 @@ namespace MagicTree.Climb
         static readonly Color Warm = new Color(1f, 0.92f, 0.75f);
 
         const string KeyBest = "climb_best", KeyDew = "climb_dew", KeySeed = "climb_seed",
-                     KeyCheckpoint = "climb_checkpoint", KeyStory = "climb_story_seen";
+                     KeyCheckpoint = "climb_checkpoint", KeyStory = "climb_story_seen", KeyEnding = "climb_ending_seen";
 
         ClimbWorld _world;
         Camera _cam;
@@ -51,6 +51,10 @@ namespace MagicTree.Climb
         GameObject _controls, _title;
         Coroutine _toastRoutine;
 
+        SoundFx _sfx;
+        Text _muteLabel;
+        float _climbStep;
+
         int _dew;
         float _best;
         int _area = -1;
@@ -60,6 +64,7 @@ namespace MagicTree.Climb
             _best = PlayerPrefs.GetFloat(KeyBest, 0f);
             _dew = PlayerPrefs.GetInt(KeyDew, 0);
 
+            _sfx = gameObject.AddComponent<SoundFx>();
             SetupCamera();
             _worldRoot = new GameObject("World").transform;
             _worldRoot.SetParent(transform, false);
@@ -78,12 +83,13 @@ namespace MagicTree.Climb
             float checkpoint = PlayerPrefs.GetFloat(KeyCheckpoint, 0f);
 
             _world = new ClimbWorld(seed);
-            _world.Jumped += () => _squash = 1.15f;
-            _world.Landed += () => _squash = 0.85f;
+            _world.Jumped += () => { _squash = 1.15f; _sfx.Play(SoundFx.Kind.Jump, 0.7f); };
+            _world.Landed += () => { _squash = 0.85f; _sfx.Play(SoundFx.Kind.Land, 0.5f); };
             _world.Bounced += OnBounced;
-            _world.Hit += () => ShowToast("앗, 폭신!");
+            _world.Hit += () => { ShowToast("앗, 폭신!"); _sfx.Play(SoundFx.Kind.Hit); };
             _world.DewCollected += OnDewCollected;
             _world.CheckpointReached += OnCheckpoint;
+            _world.GoalReached += OnGoal;
 
             // 같은 seed 면 같은 나무가 다시 만들어진다 → 저장된 쉼터에서 이어 하기
             _world.GenerateUpTo(checkpoint + C.GenerateAhead);
@@ -149,6 +155,7 @@ namespace MagicTree.Climb
         void OnBounced()
         {
             _squash = 1.25f;
+            _sfx.Play(SoundFx.Kind.Bounce, 0.8f);
             foreach (var m in _world.Mushrooms)
                 if (Mathf.Abs(m.X - _world.Pos.x) < 0.8f && _views.TryGetValue(m, out var t))
                     StartCoroutine(Squish(t));
@@ -157,6 +164,7 @@ namespace MagicTree.Climb
         void OnDewCollected(Dew d)
         {
             _dew++;
+            _sfx.Play(SoundFx.Kind.Dew, 0.6f);
             if (_views.TryGetValue(d, out var t))
             {
                 _views.Remove(d);
@@ -166,8 +174,25 @@ namespace MagicTree.Climb
 
         void OnCheckpoint(float y)
         {
-            ShowToast("반딧불 쉼터에 도착했어요");
+            if (Mathf.Abs(y - C.GoalHeight) > 0.01f) ShowToast("반딧불 쉼터에 도착했어요");
+            _sfx.Play(SoundFx.Kind.Checkpoint, 0.8f);
             Save();
+        }
+
+        void OnGoal()
+        {
+            Save();
+            if (PlayerPrefs.GetInt(KeyEnding, 0) == 1) { ShowToast("별 열매가 반짝이고 있어요"); return; }
+            PlayerPrefs.SetInt(KeyEnding, 1);
+            _playing = false;
+            _controls.SetActive(false);
+            _sfx.Play(SoundFx.Kind.Ending);
+            StartCoroutine(PlayPanels(Ending, EndingArt, "엔딩", () =>
+            {
+                _controls.SetActive(true);
+                _playing = true;
+                ShowToast("더 높이, 별빛 너머로!");
+            }));
         }
 
         // ───────────────────────── 카메라 / 배경 ─────────────────────────
@@ -304,6 +329,13 @@ namespace MagicTree.Climb
             FitHeight(lamp, 1.1f);
             lamp.transform.localPosition = new Vector3(-3.6f, 0.55f, 0f);
             lamp.gameObject.AddComponent<Glow>();
+            if (p.IsGoal)
+            {
+                var star = MakeSprite("StarFruit", root, Art("obj_star_fruit", null, new Color(1f, 0.9f, 0.5f)), OrderProp);
+                FitHeight(star, 1.3f);
+                star.transform.localPosition = new Vector3(2.8f, 0.85f, 0f);
+                star.gameObject.AddComponent<Glow>();
+            }
             return root;
         }
 
@@ -395,6 +427,8 @@ namespace MagicTree.Climb
             if (w.Mode == PlayerMode.Climb)
             {
                 _climbAnim += Mathf.Abs(w.Vel.y) * dt;
+                _climbStep += Mathf.Abs(w.Vel.y) * dt;
+                if (_climbStep > 0.6f) { _climbStep = 0f; _sfx.Play(SoundFx.Kind.Climb, 0.5f); }
                 _player.flipX = Mathf.Repeat(_climbAnim, 0.6f) > 0.3f; // 오를 때 좌우로 번갈아
             }
             else _player.flipX = w.Facing < 0;
@@ -437,6 +471,13 @@ namespace MagicTree.Climb
             _dewText = UIFactory.CreateText("Dew", _root, "", 44, TextAnchor.MiddleLeft, Color.white);
             UIFactory.Place(_dewText.rectTransform, new Vector2(1f, 1f), new Vector2(-75, -95), new Vector2(160, 60));
 
+            var mute = UIFactory.CreateButton("Mute", _root, Art("__round", null, Color.white), ButtonColor);
+            UIFactory.Place((RectTransform)mute.transform, new Vector2(0f, 1f), new Vector2(90, -95), new Vector2(100, 100));
+            _muteLabel = UIFactory.CreateText("Label", mute.transform, "", 30, TextAnchor.MiddleCenter, Color.white);
+            UIFactory.Stretch(_muteLabel.rectTransform);
+            mute.onClick.AddListener(() => { SoundFx.Muted = !SoundFx.Muted; RefreshMute(); });
+            RefreshMute();
+
             _toastText = UIFactory.CreateText("Toast", _root, "", 54, TextAnchor.MiddleCenter, Warm);
             UIFactory.Place(_toastText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0, -300), new Vector2(1000, 120));
             _toastText.gameObject.SetActive(false);
@@ -451,6 +492,8 @@ namespace MagicTree.Climb
             _jump = MakeHold("Jump", "점프", new Vector2(1f, 0f), new Vector2(-170, 190), 240);
             _controls.SetActive(false);
         }
+
+        void RefreshMute() => _muteLabel.text = SoundFx.Muted ? "소리\n끔" : "소리\n켬";
 
         HoldButton MakeHold(string name, string label, Vector2 anchor, Vector2 pos, float size)
         {
@@ -491,6 +534,15 @@ namespace MagicTree.Climb
             "토리는 작은 가방에 물병을 챙겨\n요술나무 밑동으로 갔어요.",
             "아픈 숲 친구들이 다시 웃을 수 있게.\n토리는 꼭대기를 향해 오르기 시작했어요.",
         };
+        static readonly string[] StoryArt = { "story_1", "story_2", "story_3", "story_4" };
+
+        static readonly string[] Ending =
+        {
+            "구름 위, 별빛이 내려앉은 가지 끝에서\n토리는 반짝이는 별 열매를 찾았어요.",
+            "\"숲 친구들이 다시 웃게 해 주세요.\"\n별 열매가 따뜻하게 빛났어요.",
+            "다음 날 아침, 숲에는 웃음소리가 가득했어요.\n토리의 작은 용기 덕분이에요.",
+        };
+        static readonly string[] EndingArt = { "ending_1", "ending_1", "ending_2" };
 
         void ShowTitle()
         {
@@ -531,45 +583,57 @@ namespace MagicTree.Climb
             btn.onClick.AddListener(() =>
             {
                 if (storySeen) BeginPlay();
-                else StartCoroutine(PlayStory());
+                else StartCoroutine(PlayPanels(Story, StoryArt, "이야기", () =>
+                {
+                    PlayerPrefs.SetInt(KeyStory, 1);
+                    BeginPlay();
+                }));
             });
         }
 
-        IEnumerator PlayStory()
+        /// <summary>그림 + 글 장면을 차례로 보여 준다 (이야기·엔딩 공용). 그림이 없으면 토리 그림을 쓴다.</summary>
+        IEnumerator PlayPanels(string[] lines, string[] artIds, string label, System.Action done)
         {
-            var rt = (RectTransform)_title.transform;
-            for (int i = rt.childCount - 1; i >= 0; i--) Destroy(rt.GetChild(i).gameObject);
+            var layer = UIFactory.CreateRect("Panels", _root);
+            UIFactory.Stretch(layer);
 
-            var bg = UIFactory.CreateImage("StoryBg", rt, null, new Color(1f, 0.93f, 0.86f));
+            var bg = UIFactory.CreateImage("PanelBg", layer, null, new Color(1f, 0.93f, 0.86f));
             UIFactory.Stretch(bg.rectTransform);
-            var tori = UIFactory.CreateImage("Tori", rt, Art("char_tori", null, new Color(1f, 0.7f, 0.55f)));
-            tori.raycastTarget = false;
-            UIFactory.Place(tori.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0, 250), new Vector2(460, 560));
-            var text = UIFactory.CreateText("StoryText", rt, "", 50, TextAnchor.MiddleCenter, new Color(0.42f, 0.28f, 0.3f));
+            var pic = UIFactory.CreateImage("Picture", layer, null);
+            pic.raycastTarget = false;
+            UIFactory.Place(pic.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0, 280), new Vector2(940, 940));
+            var text = UIFactory.CreateText("PanelText", layer, "", 48, TextAnchor.MiddleCenter, new Color(0.42f, 0.28f, 0.3f));
             text.GetComponent<Shadow>().enabled = false;
-            UIFactory.Place(text.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0, -260), new Vector2(980, 300));
-            var next = UIFactory.CreateText("Next", rt, "눌러서 계속  ▶", 38, TextAnchor.MiddleCenter, new Color(0.7f, 0.5f, 0.5f));
+            UIFactory.Place(text.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0, -410), new Vector2(980, 260));
+            var next = UIFactory.CreateText("Next", layer, "", 36, TextAnchor.MiddleCenter, new Color(0.7f, 0.5f, 0.5f));
             next.GetComponent<Shadow>().enabled = false;
-            UIFactory.Place(next.rectTransform, new Vector2(0.5f, 0f), new Vector2(0, 160), new Vector2(800, 60));
+            UIFactory.Place(next.rectTransform, new Vector2(0.5f, 0f), new Vector2(0, 130), new Vector2(900, 60));
 
             var btn = bg.gameObject.AddComponent<Button>();
             btn.transition = Selectable.Transition.None;
             bool clicked = false;
             btn.onClick.AddListener(() => clicked = true);
 
-            foreach (var line in Story)
+            for (int i = 0; i < lines.Length; i++)
             {
-                text.text = line;
+                string id = i < artIds.Length ? artIds[i] : null;
+                bool hasArt = id != null && ArtLibrary.HasApproved(id);
+                pic.sprite = hasArt ? ArtLibrary.Get(id, Color.white, false) : Art("char_tori", null, new Color(1f, 0.7f, 0.55f));
+                pic.preserveAspect = true;
+                pic.rectTransform.sizeDelta = hasArt ? new Vector2(940, 940) : new Vector2(460, 560);
+                text.text = lines[i];
+                next.text = $"{label} {i + 1}/{lines.Length}   ·   눌러서 계속 ▶";
                 clicked = false;
                 yield return new WaitUntil(() => clicked);
             }
-            PlayerPrefs.SetInt(KeyStory, 1);
-            BeginPlay();
+            Destroy(layer.gameObject);
+            if (_title != null) _title.SetActive(false);
+            done?.Invoke();
         }
 
         void BeginPlay()
         {
-            Destroy(_title);
+            if (_title != null) Destroy(_title);
             _controls.SetActive(true);
             _playing = true;
             _area = C.AreaFor(_world.Pos.y);

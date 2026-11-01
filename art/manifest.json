@@ -200,6 +200,56 @@
       "prompt": "vertical mobile game background section, the middle part of a giant gentle magic tree trunk filling the center third of the frame and running straight from the very top edge to the very bottom edge with no base and no canopy, warm pastel sky in peach, pink and lavender on both sides with soft clouds, a few tiny glowing fireflies, soft warm light, low detail, same top and bottom so it can repeat vertically, no branches, no characters, no text",
       "status": "approved",
       "approved_from": "bg_trunk_tile__v1.png"
+    },
+    {
+      "id": "story_1",
+      "name_ko": "이야기 1 - 별똥별",
+      "aspect_ratio": "1:1",
+      "prompt": "night in a cozy little forest village with round wooden cottages and warm glowing windows, the child Tori from the reference image (same face, curly brown hair, acorn-cap hat, cream sweater, peach scarf, mint shorts, brown boots, satchel), standing outside in pajamas over the sweater, pointing up in wonder at a sparkling shooting star falling toward the top of a giant magical tree far away on the hill. Warm pastel storybook illustration, soft golden light, cozy and gentle mood, rounded shapes, same art style as the reference, full scene with background, no text, no speech bubbles.",
+      "status": "prompt_approved"
+    },
+    {
+      "id": "story_2",
+      "name_ko": "이야기 2 - 할머니 이야기",
+      "aspect_ratio": "1:1",
+      "prompt": "inside a warm cottage by a crackling fireplace, a kind original grandmother with round glasses, white bun hair and a lavender shawl, knitting in a rocking chair and telling a story, the child Tori from the reference image (same face, curly brown hair, acorn-cap hat, cream sweater, peach scarf, mint shorts, brown boots, satchel), sitting on a rug hugging knees and listening with sparkling eyes, a little picture book showing a tree with a glowing star-shaped fruit. Warm pastel storybook illustration, soft golden light, cozy and gentle mood, rounded shapes, same art style as the reference, full scene with background, no text, no speech bubbles.",
+      "status": "prompt_approved"
+    },
+    {
+      "id": "story_3",
+      "name_ko": "이야기 3 - 출발",
+      "aspect_ratio": "1:1",
+      "prompt": "early morning with soft peach sunrise, the child Tori from the reference image (same face, curly brown hair, acorn-cap hat, cream sweater, peach scarf, mint shorts, brown boots, satchel), walking happily along a flower path toward the enormous base of a giant magical tree with huge roots, satchel and water bottle on the side. Warm pastel storybook illustration, soft golden light, cozy and gentle mood, rounded shapes, same art style as the reference, full scene with background, no text, no speech bubbles.",
+      "status": "prompt_approved"
+    },
+    {
+      "id": "story_4",
+      "name_ko": "이야기 4 - 숲 친구들",
+      "aspect_ratio": "1:1",
+      "prompt": "at the foot of the giant magical tree, the child Tori from the reference image (same face, curly brown hair, acorn-cap hat, cream sweater, peach scarf, mint shorts, brown boots, satchel), looking up at the endless trunk with a determined smile, small sick forest animal friends nearby watching hopefully: a little bunny with a bandaged ear, a tired sparrow, a sleepy hedgehog wrapped in a leaf blanket. Warm pastel storybook illustration, soft golden light, cozy and gentle mood, rounded shapes, same art style as the reference, full scene with background, no text, no speech bubbles.",
+      "status": "prompt_approved"
+    },
+    {
+      "id": "ending_1",
+      "name_ko": "엔딩 1 - 별 열매",
+      "aspect_ratio": "1:1",
+      "prompt": "at the very top of the giant magical tree above the clouds under a starry pastel twilight sky, the child Tori from the reference image (same face, curly brown hair, acorn-cap hat, cream sweater, peach scarf, mint shorts, brown boots, satchel), gently holding a glowing star-shaped fruit with both hands, joyful tears, soft sparkles all around. Warm pastel storybook illustration, soft golden light, cozy and gentle mood, rounded shapes, same art style as the reference, full scene with background, no text, no speech bubbles.",
+      "status": "prompt_approved"
+    },
+    {
+      "id": "ending_2",
+      "name_ko": "엔딩 2 - 다시 웃는 숲",
+      "aspect_ratio": "1:1",
+      "prompt": "a sunny flower meadow in the forest village, the child Tori from the reference image (same face, curly brown hair, acorn-cap hat, cream sweater, peach scarf, mint shorts, brown boots, satchel), laughing with the now healthy forest friends (bunny, sparrow, hedgehog) and the kind grandmother with round glasses and lavender shawl, flower petals floating, the giant magical tree glowing softly in the distance. Warm pastel storybook illustration, soft golden light, cozy and gentle mood, rounded shapes, same art style as the reference, full scene with background, no text, no speech bubbles.",
+      "status": "prompt_approved"
+    },
+    {
+      "id": "obj_star_fruit",
+      "name_ko": "별 열매",
+      "aspect_ratio": "1:1",
+      "prompt": "a single magical star-shaped fruit hanging from a tiny twig with two soft leaves, plump rounded five-point star shape, glowing warm golden and peach gradient with a gentle inner light and tiny sparkles, warm pastel colors, soft lighting, centered, transparent background, 2D game item sprite, no text",
+      "status": "approved",
+      "approved_from": "obj_star_fruit__v1.png"
     }
   ]
 }
