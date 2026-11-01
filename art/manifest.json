@@ -20,28 +20,28 @@
       "id": "tree_stage_0",
       "name_ko": "나무 1단계 - 씨앗",
       "aspect_ratio": "1:1",
-      "prompt": "a single magical seed glowing faintly, sitting on a small mound of soil, tiny sparkles, centered, isolated on plain white background, game sprite, no text",
+      "prompt": "a single magical seed glowing softly with lavender and teal light, half buried in a tiny patch of soil, a few golden sparkles floating around it, resting on a small round grass mound with tiny pink and purple flowers and small rounded lavender stones, centered, transparent background, game sprite, no text",
       "status": "prompt_draft"
     },
     {
       "id": "tree_stage_1",
       "name_ko": "나무 2단계 - 새싹",
       "aspect_ratio": "1:1",
-      "prompt": "a tiny cute sprout with two round leaves growing from a small mound of soil, faint magical glow, centered, isolated on plain white background, game sprite, no text",
+      "prompt": "a tiny cute sprout with two round teal-green leaves and a faint lavender glow, a couple of golden sparkles, growing from a small round grass mound with tiny pink and purple flowers and small rounded lavender stones, centered, transparent background, game sprite, no text",
       "status": "prompt_draft"
     },
     {
       "id": "tree_stage_2",
       "name_ko": "나무 3단계 - 어린 나무",
       "aspect_ratio": "1:1",
-      "prompt": "a young sapling tree with a thin trunk and a small round leafy crown, light green leaves, a few sparkles, standing on a small grass mound, centered, isolated on plain white background, game sprite, no text",
+      "prompt": "a young sapling tree with a thin, slightly twisting brown trunk and a small round crown of fresh green leaves tinged with teal, a few tiny golden glowing lights between the leaves, standing on a small round grass mound with tiny pink and purple flowers and small rounded lavender stones, centered, transparent background, game sprite, no text",
       "status": "prompt_draft"
     },
     {
       "id": "tree_stage_3",
       "name_ko": "나무 4단계 - 큰 나무",
       "aspect_ratio": "1:1",
-      "prompt": "a big healthy tree with a sturdy trunk and a full round lush green crown, subtle magical glow between leaves, standing on a grass mound, centered, isolated on plain white background, game sprite, no text",
+      "prompt": "a big healthy tree with a sturdy, gently twisting brown trunk wrapped by a thin green vine, a full round lush crown of green leaves with hints of teal and lavender at the tips, soft golden lights glowing between the leaves, standing on a small round grass mound with tiny pink and purple flowers and small rounded lavender stones, centered, transparent background, game sprite, no text",
       "status": "prompt_draft"
     },
     {
