@@ -17,6 +17,7 @@
   python3 tools/kie/kie_art.py generate tree_stage_0 --model <모델ID> --set resolution=1K   # 이번만 다른 모델
   python3 tools/kie/kie_art.py approve tree_stage_0 2                     # 2번 후보 채택
   python3 tools/kie/kie_art.py reject tree_stage_0
+  python3 tools/kie/kie_art.py bounds                                     # art_bounds.txt 다시 계산
 
 API (docs.kie.ai, 2026-11 기준 — 변경 시 아래 상수만 수정):
   POST {BASE}/jobs/createTask      body: {"model", "input": {...}}  → data.taskId
@@ -39,6 +40,9 @@ MANIFEST = ROOT / "art" / "manifest.json"
 PENDING = ROOT / "art" / "pending"
 REJECTED = ROOT / "art" / "rejected"
 APPROVED = ROOT / "Assets" / "Resources" / "Art"
+
+BOUNDS = APPROVED / "art_bounds.txt"   # 게임이 읽는 '보이는 영역' (투명 여백 제외)
+ALPHA_CUTOFF = 40                      # 이 값 이하의 알파는 여백으로 본다
 
 POLL_INTERVAL = 4
 POLL_TIMEOUT = 300
@@ -122,6 +126,28 @@ def download(url, dest):
         shutil.copyfileobj(r, f)
 
 
+def write_bounds():
+    """승인된 PNG마다 불투명 영역을 0~1 비율로 기록한다 (Unity 텍스처 좌표: 왼쪽 아래가 원점).
+    게임(ArtLibrary)이 이 값으로 스프라이트의 투명 여백을 잘라내서, 단계마다 여백이 달라도
+    나무 밑동이 같은 땅 위치에 오게 한다. Pillow 가 없으면 건너뛴다(게임은 여백 포함 전체를 쓴다)."""
+    try:
+        from PIL import Image
+    except ImportError:
+        print("  (Pillow 없음: art_bounds.txt 갱신 생략 — pip install pillow)")
+        return
+    lines = ["# id x_min y_min x_max y_max  (0~1, 왼쪽 아래 원점) — tools/kie/kie_art.py 가 자동 생성"]
+    for png in sorted(APPROVED.glob("*.png")):
+        with Image.open(png) as im:
+            w, h = im.size
+            box = None
+            if "A" in im.getbands():
+                box = im.getchannel("A").point(lambda v: 255 if v > ALPHA_CUTOFF else 0).getbbox()
+            l, t, r, b = box or (0, 0, w, h)
+        lines.append(f"{png.stem} {l / w:.4f} {1 - b / h:.4f} {r / w:.4f} {1 - t / h:.4f}")
+    BOUNDS.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    print(f"  보이는 영역 갱신: {BOUNDS.relative_to(ROOT)}")
+
+
 def candidates(asset_id):
     return sorted(PENDING.glob(f"{asset_id}__v*.png"))
 
@@ -193,6 +219,7 @@ def cmd_approve(args):
     a["approved_from"] = pick.name
     save(m)
     print(f"승인 완료 → Assets/Resources/Art/{args.id}.png")
+    write_bounds()
 
 
 def cmd_reject(args):
@@ -217,6 +244,7 @@ def main():
     s.set_defaults(fn=cmd_generate)
     s = sub.add_parser("approve"); s.add_argument("id"); s.add_argument("variant", type=int); s.set_defaults(fn=cmd_approve)
     s = sub.add_parser("reject"); s.add_argument("id"); s.set_defaults(fn=cmd_reject)
+    sub.add_parser("bounds", help="승인 이미지의 보이는 영역(art_bounds.txt) 다시 계산").set_defaults(fn=lambda _: write_bounds())
     args = p.parse_args()
     args.fn(args)
 

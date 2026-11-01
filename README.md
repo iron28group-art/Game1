@@ -10,6 +10,7 @@ Unity로 만드는 방치형 클리커 게임 프로토타입입니다.
 - 자동 저장(PlayerPrefs)과 오프라인 보상(최대 8시간)이 있습니다.
 
 밸런스 수치는 `Assets/Scripts/Core/GameConfig.cs` 한 곳에 모여 있습니다.
+화면 배치 수치(땅 높이, 단계별 나무 높이, 정보 패널 높이)는 `Assets/Scripts/Core/MagicTreeGame.cs` 위쪽 상수에 있습니다.
 
 ## 실행 방법
 1. Unity Hub → **Add project from disk** → 이 폴더를 선택합니다.
@@ -36,6 +37,8 @@ python3 tools/kie/kie_art.py reject tree_stage_0         # 전부 거절
 ```
 
 - 승인된 이미지는 `Assets/Resources/Art/{id}.png`에 들어가고, 게임이 자동으로 읽습니다.
+- 승인할 때 `Assets/Resources/Art/art_bounds.txt`에 각 그림의 **보이는 영역**(투명 여백 제외)이 자동 기록됩니다. 게임은 이 값으로 여백을 잘라서, 단계마다 여백이 달라도 나무 밑동이 같은 땅 위치에 오게 합니다. 직접 PNG를 바꿨다면 `python3 tools/kie/kie_art.py bounds`로 다시 계산하세요(Pillow 필요).
+- `Assets/Editor/ArtImportSettings.cs`가 Art 폴더 이미지를 Sprite·NPOT 유지·최대 4096으로 임포트합니다. 프로젝트를 이 파일 추가 전에 열었다면 Art 폴더를 **Reimport** 하세요.
 - kie.ai 모델 이름과 입력 필드는 `art/manifest.json`의 `kie` 항목에서 바꿉니다(기본값: GPT Image 2.5 Sunburst `gpt-image-2-5-sunburst-text-to-image`, 1K·투명 배경).
 - 클라우드 세션에서 쓰려면 환경 설정의 허용 도메인에 `api.kie.ai`(그리고 결과 이미지를 내려받는 호스트)를 추가하고, 환경 변수에 `KIE_API_KEY`를 넣어야 합니다.
 
@@ -44,6 +47,7 @@ python3 tools/kie/kie_art.py reject tree_stage_0         # 전부 거절
 Assets/Scripts/Core   게임 로직, 저장, 밸런스, 부트스트랩
 Assets/Scripts/UI     코드로 UI를 만드는 도우미
 Assets/Scripts/Art    승인 이미지 / 플레이스홀더 로더
+Assets/Editor         Art 폴더 임포트 설정
 Assets/Resources/Art  승인된 이미지만 들어가는 곳
 art/manifest.json     에셋 목록, 프롬프트, 승인 상태
 art/pending           생성된 후보(커밋하지 않음)
