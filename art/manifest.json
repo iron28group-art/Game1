@@ -21,28 +21,32 @@
       "name_ko": "나무 1단계 - 씨앗",
       "aspect_ratio": "1:1",
       "prompt": "a single magical seed glowing softly with lavender and teal light, half buried in a tiny patch of soil, a few golden sparkles floating around it, resting on a small round grass mound with tiny pink and purple flowers and small rounded lavender stones, centered, transparent background, game sprite, no text",
-      "status": "awaiting_approval"
+      "status": "approved",
+      "approved_from": "tree_stage_0__v2.png"
     },
     {
       "id": "tree_stage_1",
       "name_ko": "나무 2단계 - 새싹",
       "aspect_ratio": "1:1",
       "prompt": "a tiny cute sprout with two round teal-green leaves and a faint lavender glow, a couple of golden sparkles, growing from a small round grass mound with tiny pink and purple flowers and small rounded lavender stones, centered, transparent background, game sprite, no text",
-      "status": "awaiting_approval"
+      "status": "approved",
+      "approved_from": "tree_stage_1__v1.png"
     },
     {
       "id": "tree_stage_2",
       "name_ko": "나무 3단계 - 어린 나무",
       "aspect_ratio": "1:1",
       "prompt": "a young sapling tree with a thin, slightly twisting brown trunk and a small round crown of fresh green leaves tinged with teal, a few tiny golden glowing lights between the leaves, standing on a small round grass mound with tiny pink and purple flowers and small rounded lavender stones, centered, transparent background, game sprite, no text",
-      "status": "awaiting_approval"
+      "status": "approved",
+      "approved_from": "tree_stage_2__v1.png"
     },
     {
       "id": "tree_stage_3",
       "name_ko": "나무 4단계 - 큰 나무",
       "aspect_ratio": "1:1",
       "prompt": "a big healthy tree with a sturdy, gently twisting brown trunk wrapped by a thin green vine, a full round lush crown of green leaves with hints of teal and lavender at the tips, soft golden lights glowing between the leaves, standing on a small round grass mound with tiny pink and purple flowers and small rounded lavender stones, centered, transparent background, game sprite, no text",
-      "status": "awaiting_approval"
+      "status": "approved",
+      "approved_from": "tree_stage_3__v2.png"
     },
     {
       "id": "tree_stage_4",
