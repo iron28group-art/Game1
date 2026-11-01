@@ -16,7 +16,7 @@ namespace MagicTree.Climb
         const float BranchSurfaceFromTop = 0.28f;   // 가지 그림 위쪽에서 밟는 면까지 (그림 높이 비율)
         const float BranchVisualExtra = 0.5f;       // 가지 그림을 충돌 폭보다 조금 길게
         const float VineWidth = 0.75f;
-        const bool CaterpillarFacesRight = true;
+        const bool CaterpillarFacesRight = false;  // obj_caterpillar 그림은 머리가 왼쪽
 
         // 정렬 순서
         const int OrderBg = -100, OrderWind = -5, OrderVine = 0, OrderPlatform = 1, OrderProp = 2,

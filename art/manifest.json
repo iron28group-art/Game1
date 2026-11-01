@@ -118,77 +118,88 @@
       "name_ko": "토리 - 서기",
       "aspect_ratio": "1:1",
       "prompt": "the same child character Tori as in the reference image (same face, curly brown hair, acorn-cap hat, cream sweater, peach scarf, mint shorts, brown boots, satchel), keep the exact same art style and colors, standing relaxed with a gentle smile, full body, side view facing right, centered, transparent background, 2D game character sprite, no text",
-      "status": "awaiting_approval"
+      "status": "approved",
+      "approved_from": "tori_idle__v1.png"
     },
     {
       "id": "tori_run",
       "name_ko": "토리 - 달리기",
       "aspect_ratio": "1:1",
       "prompt": "the same child character Tori as in the reference image (same face, curly brown hair, acorn-cap hat, cream sweater, peach scarf, mint shorts, brown boots, satchel), keep the exact same art style and colors, running energetically mid-stride, scarf fluttering behind, full body, side view facing right, centered, transparent background, 2D game character sprite, no text",
-      "status": "awaiting_approval"
+      "status": "approved",
+      "approved_from": "tori_run__v1.png"
     },
     {
       "id": "tori_jump",
       "name_ko": "토리 - 점프",
       "aspect_ratio": "1:1",
       "prompt": "the same child character Tori as in the reference image (same face, curly brown hair, acorn-cap hat, cream sweater, peach scarf, mint shorts, brown boots, satchel), keep the exact same art style and colors, jumping upward with knees tucked and one arm reaching up, joyful expression, full body, side view facing right, centered, transparent background, 2D game character sprite, no text",
-      "status": "awaiting_approval"
+      "status": "approved",
+      "approved_from": "tori_jump__v1.png"
     },
     {
       "id": "tori_climb",
       "name_ko": "토리 - 덩굴 오르기",
       "aspect_ratio": "1:1",
       "prompt": "the same child character Tori as in the reference image (same face, curly brown hair, acorn-cap hat, cream sweater, peach scarf, mint shorts, brown boots, satchel), keep the exact same art style and colors, climbing a vertical vine, seen from behind, both hands gripping above, one knee raised, full body, centered, transparent background, 2D game character sprite, no vine visible, no text",
-      "status": "prompt_approved"
+      "status": "approved",
+      "approved_from": "tori_climb__v1.png"
     },
     {
       "id": "obj_branch",
       "name_ko": "발판 - 나뭇가지",
       "aspect_ratio": "16:9",
       "prompt": "a short thick horizontal tree branch platform seen from the side, flat walkable top with soft moss and a few small leaves and tiny flowers, rounded ends, warm pastel colors, soft lighting, gentle rounded shapes, centered, transparent background, 2D game sprite, no text",
-      "status": "prompt_approved"
+      "status": "approved",
+      "approved_from": "obj_branch__v1.png"
     },
     {
       "id": "obj_vine",
       "name_ko": "덩굴",
       "aspect_ratio": "9:16",
       "prompt": "a single long vertical climbing vine hanging straight down, soft green stem with small heart-shaped leaves and a few tiny pastel flowers, evenly spaced, warm pastel colors, soft lighting, gentle rounded shapes, centered, transparent background, 2D game sprite, no text",
-      "status": "prompt_approved"
+      "status": "approved",
+      "approved_from": "obj_vine__v2.png"
     },
     {
       "id": "obj_mushroom",
       "name_ko": "통통 버섯",
       "aspect_ratio": "1:1",
       "prompt": "a cute bouncy mushroom with a round peach-pink cap with cream spots and a short cream stem, springy look, warm pastel colors, soft lighting, gentle rounded shapes, centered, transparent background, 2D game sprite, no text",
-      "status": "prompt_approved"
+      "status": "approved",
+      "approved_from": "obj_mushroom__v1.png"
     },
     {
       "id": "obj_pinecone",
       "name_ko": "솔방울",
       "aspect_ratio": "1:1",
       "prompt": "a single cute round pinecone with soft brown scales and a tiny leaf, slightly rolling, warm pastel colors, soft lighting, gentle rounded shapes, centered, transparent background, 2D game sprite, no text",
-      "status": "prompt_approved"
+      "status": "approved",
+      "approved_from": "obj_pinecone__v1.png"
     },
     {
       "id": "obj_caterpillar",
       "name_ko": "애벌레",
       "aspect_ratio": "1:1",
       "prompt": "a cute sleepy mint green caterpillar with round segments, closed eyes, rosy cheeks, side view, warm pastel colors, soft lighting, gentle rounded shapes, centered, transparent background, 2D game sprite, no text",
-      "status": "prompt_approved"
+      "status": "approved",
+      "approved_from": "obj_caterpillar__v1.png"
     },
     {
       "id": "obj_firefly",
       "name_ko": "반딧불 체크포인트",
       "aspect_ratio": "1:1",
       "prompt": "a small glowing glass lantern hanging from a twig, with a friendly firefly glowing softly inside, warm golden light, warm pastel colors, soft lighting, gentle rounded shapes, centered, transparent background, 2D game sprite, no text",
-      "status": "prompt_approved"
+      "status": "approved",
+      "approved_from": "obj_firefly__v2.png"
     },
     {
       "id": "bg_trunk_tile",
       "name_ko": "등반 배경 - 줄기 반복 조각",
       "aspect_ratio": "9:16",
       "prompt": "vertical mobile game background section, the middle part of a giant gentle magic tree trunk filling the center third of the frame and running straight from the very top edge to the very bottom edge with no base and no canopy, warm pastel sky in peach, pink and lavender on both sides with soft clouds, a few tiny glowing fireflies, soft warm light, low detail, same top and bottom so it can repeat vertically, no branches, no characters, no text",
-      "status": "prompt_approved"
+      "status": "approved",
+      "approved_from": "bg_trunk_tile__v1.png"
     }
   ]
 }
