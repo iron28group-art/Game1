@@ -1,10 +1,11 @@
 {
   "kie": {
-    "model": "nano-banana-2",
+    "model": "gpt-image-2-5-sunburst-text-to-image",
     "input_defaults": {
-      "output_format": "png"
+      "resolution": "1K",
+      "background": "transparent"
     },
-    "_note": "model 이름과 input 필드는 kie.ai 문서(https://docs.kie.ai) 기준 확인 필요. 바꾸려면 여기만 수정."
+    "_note": "GPT Image 2.5 Sunburst (docs.kie.ai/market/gpt/gpt-image-2-5-sunburst-text-to-image). background=transparent 는 resolution=1K 에서만 지원. output_format 필드는 없음."
   },
   "style": "cute storybook fantasy illustration, soft pastel colors, clean bold outlines, gentle cel shading, mobile casual game art, consistent style",
   "assets": [

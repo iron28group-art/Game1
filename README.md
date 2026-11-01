@@ -36,7 +36,7 @@ python3 tools/kie/kie_art.py reject tree_stage_0         # 전부 거절
 ```
 
 - 승인된 이미지는 `Assets/Resources/Art/{id}.png`에 들어가고, 게임이 자동으로 읽습니다.
-- kie.ai 모델 이름과 입력 필드는 `art/manifest.json`의 `kie` 항목에서 바꿉니다(확인 필요: 기본값은 `nano-banana-2`).
+- kie.ai 모델 이름과 입력 필드는 `art/manifest.json`의 `kie` 항목에서 바꿉니다(기본값: GPT Image 2.5 Sunburst `gpt-image-2-5-sunburst-text-to-image`, 1K·투명 배경).
 - 클라우드 세션에서 쓰려면 환경 설정의 허용 도메인에 `api.kie.ai`(그리고 결과 이미지를 내려받는 호스트)를 추가하고, 환경 변수에 `KIE_API_KEY`를 넣어야 합니다.
 
 ## 폴더 구조
