@@ -13,8 +13,8 @@
       "id": "bg_meadow",
       "name_ko": "배경 - 요정의 들판",
       "aspect_ratio": "9:16",
-      "prompt": "vertical mobile game background, magical meadow at the edge of an enchanted forest, soft blue sky with fluffy clouds, gentle rolling green hills, scattered tiny glowing flowers, empty open space in the center-bottom for a tree, no characters, no text",
-      "status": "prompt_draft"
+      "prompt": "vertical mobile game background, magical meadow at the edge of an enchanted forest, soft blue sky with fluffy clouds, gentle rolling green hills, distant trees with hints of teal and lavender leaves, scattered tiny glowing pink and purple flowers, a few golden fireflies, empty open grassy space in the center-bottom for a tree, no tree in the center, no characters, no text",
+      "status": "prompt_approved"
     },
     {
       "id": "tree_stage_0",
@@ -60,36 +60,37 @@
       "id": "fruit_magic",
       "name_ko": "요술 열매",
       "aspect_ratio": "1:1",
-      "prompt": "a single shiny magical fruit, round, pink and gold gradient, small leaf on top, soft glow and sparkles, centered, isolated on plain white background, game item icon, no text",
-      "status": "prompt_draft"
+      "prompt": "a single shiny round magical fruit with a pink to gold gradient and a soft inner glow, one small teal-green leaf and a short brown stem on top, a few tiny golden sparkles around it, no ground, centered, transparent background, game item icon, no text",
+      "status": "approved",
+      "approved_from": "fruit_magic__v1.png"
     },
     {
       "id": "icon_mana",
       "name_ko": "아이콘 - 마나 이슬",
       "aspect_ratio": "1:1",
-      "prompt": "a single glowing blue magic dew drop, crystal clear with a sparkle highlight, centered, isolated on plain white background, game currency icon, no text",
-      "status": "prompt_draft"
+      "prompt": "a single glowing magic dew drop, crystal clear blue with a teal and lavender shimmer and a bright sparkle highlight, a few tiny golden sparkles, no ground, centered, transparent background, game currency icon, no text",
+      "status": "prompt_approved"
     },
     {
       "id": "icon_watering_can",
       "name_ko": "아이콘 - 물뿌리개",
       "aspect_ratio": "1:1",
-      "prompt": "a cute small watering can pouring sparkling magical water, mint green color, centered, isolated on plain white background, game upgrade icon, no text",
-      "status": "prompt_draft"
+      "prompt": "a cute small mint green watering can pouring sparkling magical water with tiny golden sparkles, no ground, centered, transparent background, game upgrade icon, no text",
+      "status": "prompt_approved"
     },
     {
       "id": "icon_fairy",
       "name_ko": "아이콘 - 요정 친구",
       "aspect_ratio": "1:1",
-      "prompt": "a tiny friendly glowing forest fairy with translucent wings, chibi proportions, holding a little dew drop, centered, isolated on plain white background, game upgrade icon, no text",
-      "status": "prompt_draft"
+      "prompt": "a tiny friendly glowing forest fairy with translucent teal and lavender wings, chibi proportions, holding a little blue dew drop, soft golden sparkles, no ground, centered, transparent background, game upgrade icon, no text",
+      "status": "prompt_approved"
     },
     {
       "id": "icon_sunlight",
       "name_ko": "아이콘 - 햇살",
       "aspect_ratio": "1:1",
-      "prompt": "a cute smiling sun with soft warm golden rays, centered, isolated on plain white background, game upgrade icon, no text",
-      "status": "prompt_draft"
+      "prompt": "a cute smiling sun with soft warm golden rays and a gentle glow, a few tiny sparkles, no ground, centered, transparent background, game upgrade icon, no text",
+      "status": "prompt_approved"
     }
   ]
 }
