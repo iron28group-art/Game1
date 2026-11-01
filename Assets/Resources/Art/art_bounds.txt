@@ -1,5 +1,7 @@
 # id x_min y_min x_max y_max  (0~1, 왼쪽 아래 원점) — tools/kie/kie_art.py 가 자동 생성
+bg_climb 0.0000 0.0000 1.0000 1.0000
 bg_meadow 0.0000 0.0000 1.0000 1.0000
+char_tori 0.2911 0.0064 0.7735 0.9968
 fruit_magic 0.1738 0.1435 0.8429 0.8676
 icon_fairy 0.1268 0.0247 0.8732 0.9809
 icon_mana 0.2424 0.1045 0.7735 0.8955

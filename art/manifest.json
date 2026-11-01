@@ -96,6 +96,22 @@
       "prompt": "a cute smiling sun with soft warm golden rays and a gentle glow, a few tiny sparkles, no ground, centered, transparent background, game upgrade icon, no text",
       "status": "approved",
       "approved_from": "icon_sunlight__v1.png"
+    },
+    {
+      "id": "char_tori",
+      "name_ko": "주인공 토리 (시안)",
+      "aspect_ratio": "1:1",
+      "prompt": "an original cute child character named Tori, about 7 years old, round face with rosy cheeks and warm brown eyes, wearing a little acorn-cap shaped hat, a soft cream sweater with a peach scarf, short mint shorts, tiny brown boots, a small satchel with a water bottle, cheerful hopeful smile, full body standing pose facing slightly to the side, warm pastel colors, soft lighting, gentle rounded shapes, centered, transparent background, 2D game character, no text",
+      "status": "approved",
+      "approved_from": "char_tori__v1.png"
+    },
+    {
+      "id": "bg_climb",
+      "name_ko": "등반 배경 - 요술나무 줄기",
+      "aspect_ratio": "9:16",
+      "prompt": "vertical mobile game background, looking at a giant gentle magic tree trunk rising upward through the frame, warm pastel sunset sky in peach, pink and lavender, soft fluffy clouds, distant pastel leaves and tiny glowing fireflies, soft warm light, cozy and calm mood, simple shapes with low detail so gameplay sprites stand out, no branches crossing the center, no characters, no text",
+      "status": "approved",
+      "approved_from": "bg_climb__v2.png"
     }
   ]
 }
