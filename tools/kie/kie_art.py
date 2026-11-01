@@ -14,6 +14,7 @@
   python3 tools/kie/kie_art.py list
   python3 tools/kie/kie_art.py approve-prompt tree_stage_0 tree_stage_1   # 또는 all
   python3 tools/kie/kie_art.py generate tree_stage_0 --variants 2
+  python3 tools/kie/kie_art.py generate tree_stage_0 --model <모델ID> --set resolution=1K   # 이번만 다른 모델
   python3 tools/kie/kie_art.py approve tree_stage_0 2                     # 2번 후보 채택
   python3 tools/kie/kie_art.py reject tree_stage_0
 
@@ -79,13 +80,17 @@ def api(method, path, body=None):
     return payload.get("data") or {}
 
 
-def create_task(m, asset):
+def create_task(m, asset, model=None, extra=None):
+    """model 을 주면 이번 요청에만 그 모델을 쓰고, manifest 의 input_defaults 는 쓰지 않는다
+    (모델마다 받는 input 필드가 다르기 때문). extra 는 --set 으로 받은 input 필드."""
     kie = m.get("kie", {})
-    inp = dict(kie.get("input_defaults", {}))
+    inp = {} if model else dict(kie.get("input_defaults", {}))
     inp["prompt"] = f"{asset['prompt']}. Style: {m.get('style', '')}".strip()
     if asset.get("aspect_ratio"):
         inp["aspect_ratio"] = asset["aspect_ratio"]
-    data = api("POST", "/jobs/createTask", {"model": kie.get("model", "nano-banana-2"), "input": inp})
+    inp.update(extra or {})
+    model = model or kie.get("model", "nano-banana-2")
+    data = api("POST", "/jobs/createTask", {"model": model, "input": inp})
     task_id = data.get("taskId")
     if not task_id:
         sys.exit(f"taskId 없음: {data}")
@@ -151,9 +156,17 @@ def cmd_generate(args):
         sys.exit(f"{args.id} 는 프롬프트 승인이 필요합니다 (현재: {a['status']}).")
     PENDING.mkdir(parents=True, exist_ok=True)
     n0 = len(candidates(args.id))
+    extra = {}
+    for kv in args.set or []:
+        k, sep, v = kv.partition("=")
+        if not sep:
+            sys.exit(f"--set 형식은 KEY=VALUE 입니다: {kv}")
+        extra[k] = v
+    if args.model:
+        print(f"이번 생성에만 모델 사용: {args.model}")
     for v in range(args.variants):
         print(f"[{args.id}] 생성 요청 {v + 1}/{args.variants}")
-        urls = wait_task(create_task(m, a))
+        urls = wait_task(create_task(m, a, args.model, extra))
         for url in urls:
             n0 += 1
             dest = PENDING / f"{args.id}__v{n0}.png"
@@ -198,7 +211,10 @@ def main():
     sub = p.add_subparsers(dest="cmd", required=True)
     sub.add_parser("list").set_defaults(fn=cmd_list)
     s = sub.add_parser("approve-prompt"); s.add_argument("ids", nargs="+"); s.set_defaults(fn=cmd_approve_prompt)
-    s = sub.add_parser("generate"); s.add_argument("id"); s.add_argument("--variants", type=int, default=2); s.set_defaults(fn=cmd_generate)
+    s = sub.add_parser("generate"); s.add_argument("id"); s.add_argument("--variants", type=int, default=2)
+    s.add_argument("--model", help="이번 생성에만 쓸 kie 모델 ID (manifest 기본값은 그대로)")
+    s.add_argument("--set", action="append", metavar="KEY=VALUE", help="input 필드 추가/덮어쓰기 (여러 번 가능)")
+    s.set_defaults(fn=cmd_generate)
     s = sub.add_parser("approve"); s.add_argument("id"); s.add_argument("variant", type=int); s.set_defaults(fn=cmd_approve)
     s = sub.add_parser("reject"); s.add_argument("id"); s.set_defaults(fn=cmd_reject)
     args = p.parse_args()
