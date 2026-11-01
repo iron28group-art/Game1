@@ -14,7 +14,7 @@
       "name_ko": "배경 - 요정의 들판",
       "aspect_ratio": "9:16",
       "prompt": "vertical mobile game background, magical meadow at the edge of an enchanted forest, soft blue sky with fluffy clouds, gentle rolling green hills, distant trees with hints of teal and lavender leaves, scattered tiny glowing pink and purple flowers, a few golden fireflies, empty open grassy space in the center-bottom for a tree, no tree in the center, no characters, no text",
-      "status": "prompt_approved"
+      "status": "awaiting_approval"
     },
     {
       "id": "tree_stage_0",
@@ -69,7 +69,7 @@
       "name_ko": "아이콘 - 마나 이슬",
       "aspect_ratio": "1:1",
       "prompt": "a single glowing magic dew drop, crystal clear blue with a teal and lavender shimmer and a bright sparkle highlight, a few tiny golden sparkles, no ground, centered, transparent background, game currency icon, no text",
-      "status": "prompt_approved"
+      "status": "awaiting_approval"
     },
     {
       "id": "icon_watering_can",
