@@ -53,3 +53,19 @@ art/manifest.json     에셋 목록, 프롬프트, 승인 상태
 art/pending           생성된 후보(커밋하지 않음)
 tools/kie/kie_art.py  kie.ai 생성 도구
 ```
+
+## APK 빌드
+Unity 빌드에는 **본인 Unity 계정의 라이선스**가 필요합니다.
+
+**A. 내 PC의 Unity에서 (가장 간단)**
+1. Unity Hub에서 이 프로젝트의 에디터 버전(`6000.0.23f1`)에 **Android Build Support**(OpenJDK, Android SDK & NDK 포함) 모듈을 설치합니다.
+2. 프로젝트를 열고 메뉴 **요술나무 ▸ Android APK 빌드**를 누릅니다. → `build/Android/MagicTree.apk`
+   (세로 화면, IL2CPP·ARM64, 패키지 이름 `com.iron28.magictree` 는 `Assets/Editor/BuildScript.cs`에서 자동 설정)
+
+**B. GitHub Actions에서 자동 빌드 (GameCI)**
+1. 위 A의 Unity Hub에서 개인 라이선스를 활성화하면 `Unity_lic.ulf` 파일이 생깁니다.
+   (Windows `C:\ProgramData\Unity\Unity_lic.ulf`, Mac `/Library/Application Support/Unity/Unity_lic.ulf`) — 참고: https://game.ci/docs/github/activation
+2. GitHub 저장소 **Settings ▸ Secrets and variables ▸ Actions**에 `UNITY_LICENSE`(ulf 파일 내용 전체), `UNITY_EMAIL`, `UNITY_PASSWORD`를 등록합니다. 채팅에 붙여넣지 마세요.
+3. **Actions ▸ Build Android APK ▸ Run workflow** (또는 이 브랜치에 푸시) → 끝나면 실행 페이지 아래 **Artifacts**의 `MagicTree-apk`를 내려받습니다.
+
+디버그 서명 APK라서 폰에 직접 설치(출처를 알 수 없는 앱 허용)하는 테스트용입니다. 스토어 출시용 서명은 아직 설정하지 않았습니다.

@@ -1,0 +1,67 @@
+name: Build Android APK
+
+# Unity 개인 라이선스는 저장소 Settings ▸ Secrets and variables ▸ Actions 에 등록해야 한다:
+#   UNITY_LICENSE  (Unity_lic.ulf 파일 내용 전체)
+#   UNITY_EMAIL    (Unity 계정 이메일)
+#   UNITY_PASSWORD (Unity 계정 비밀번호)
+# 자세한 방법: README.md 의 "APK 빌드" 절, https://game.ci/docs/github/activation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, claude/magic-tree-game-dev-hcejo8]
+    paths: [Assets/**, Packages/**, ProjectSettings/**, .github/workflows/build-android.yml]
+
+concurrency:
+  group: build-android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Check Unity license secrets
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        run: |
+          missing=""
+          [ -z "$UNITY_LICENSE" ] && missing="$missing UNITY_LICENSE"
+          [ -z "$UNITY_EMAIL" ] && missing="$missing UNITY_EMAIL"
+          [ -z "$UNITY_PASSWORD" ] && missing="$missing UNITY_PASSWORD"
+          if [ -n "$missing" ]; then
+            echo "::error::GitHub Secrets 에 다음 값이 없습니다:$missing (README.md 'APK 빌드' 참고)"
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+
+      # Android 빌드는 기본 러너 디스크가 부족할 수 있다
+      - uses: jlumbroso/free-disk-space@v1.3.1
+        with:
+          tool-cache: false
+
+      - uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-Android-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: Library-Android-
+
+      - uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: Android
+          androidExportType: androidPackage
+          buildMethod: MagicTree.EditorTools.BuildScript.BuildAndroid
+          buildName: MagicTree
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MagicTree-apk
+          path: build/Android/**/*.apk
+          if-no-files-found: error
