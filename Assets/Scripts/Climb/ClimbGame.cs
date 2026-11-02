@@ -142,7 +142,6 @@ namespace MagicTree.Climb
 
         ClimbInput ReadInput()
         {
-            float h = 0f, v = 0f;
             // 화면 끌기(TouchControls) + 키보드(에디터·PC)
             float h = _touch.Horizontal, v = _touch.Vertical;
             if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) h -= 1f;
