@@ -47,8 +47,9 @@ namespace MagicTree.Climb
         // UI
         RectTransform _root;
         Text _heightText, _bestText, _dewText, _toastText;
-        HoldButton _left, _right, _up, _down, _jump;
-        GameObject _controls, _title;
+        TouchControls _touch;
+        GameObject _title, _hint;
+        bool _vineHintShown;
         Coroutine _toastRoutine;
 
         SoundFx _sfx;
@@ -142,12 +143,14 @@ namespace MagicTree.Climb
         ClimbInput ReadInput()
         {
             float h = 0f, v = 0f;
-            if (_left.Held || Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) h -= 1f;
-            if (_right.Held || Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) h += 1f;
-            if (_up.Held || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) v += 1f;
-            if (_down.Held || Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) v -= 1f;
-            bool jump = _jump.ConsumePressed() | Input.GetKeyDown(KeyCode.Space);
-            return new ClimbInput { Horizontal = h, Vertical = v, JumpPressed = jump };
+            // 화면 끌기(TouchControls) + 키보드(에디터·PC)
+            float h = _touch.Horizontal, v = _touch.Vertical;
+            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) h -= 1f;
+            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) h += 1f;
+            if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) v += 1f;
+            if (Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) v -= 1f;
+            bool jump = _touch.ConsumeJump() | Input.GetKeyDown(KeyCode.Space);
+            return new ClimbInput { Horizontal = Mathf.Clamp(h, -1f, 1f), Vertical = Mathf.Clamp(v, -1f, 1f), JumpPressed = jump };
         }
 
         // ───────────────────────── 이벤트 ─────────────────────────
@@ -185,11 +188,11 @@ namespace MagicTree.Climb
             if (PlayerPrefs.GetInt(KeyEnding, 0) == 1) { ShowToast("별 열매가 반짝이고 있어요"); return; }
             PlayerPrefs.SetInt(KeyEnding, 1);
             _playing = false;
-            _controls.SetActive(false);
+            _touch.enabled = false;
             _sfx.Play(SoundFx.Kind.Ending);
             StartCoroutine(PlayPanels(Ending, EndingArt, "엔딩", () =>
             {
-                _controls.SetActive(true);
+                _touch.enabled = true;
                 _playing = true;
                 ShowToast("더 높이, 별빛 너머로!");
             }));
@@ -442,8 +445,11 @@ namespace MagicTree.Climb
             if (!nearVine)
                 foreach (var v in w.Vines)
                     if (Mathf.Abs(v.X - w.Pos.x) < 0.7f && w.Pos.y >= v.Bottom - 0.3f && w.Pos.y <= v.Top + 0.3f) { nearVine = true; break; }
-            _up.gameObject.SetActive(nearVine && _playing);
-            _down.gameObject.SetActive(nearVine && _playing);
+            if (nearVine && _playing && !_vineHintShown)
+            {
+                _vineHintShown = true;
+                ShowToast("덩굴: 위아래로 천천히 끌어서 오르기");
+            }
         }
 
         // ───────────────────────── UI ─────────────────────────
@@ -482,27 +488,19 @@ namespace MagicTree.Climb
             UIFactory.Place(_toastText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0, -300), new Vector2(1000, 120));
             _toastText.gameObject.SetActive(false);
 
-            // 조작 버튼 (왼쪽: ◀ ▶ 와 덩굴용 ▲ ▼, 오른쪽: 점프)
-            _controls = UIFactory.CreateRect("Controls", _root).gameObject;
-            UIFactory.Stretch((RectTransform)_controls.transform);
-            _left = MakeHold("Left", "◀", new Vector2(0f, 0f), new Vector2(150, 170), 190);
-            _right = MakeHold("Right", "▶", new Vector2(0f, 0f), new Vector2(360, 170), 190);
-            _down = MakeHold("Down", "▼", new Vector2(0f, 0f), new Vector2(255, 360), 150);
-            _up = MakeHold("Up", "▲", new Vector2(0f, 0f), new Vector2(255, 525), 150);
-            _jump = MakeHold("Jump", "점프", new Vector2(1f, 0f), new Vector2(-170, 190), 240);
-            _controls.SetActive(false);
+            // 조작: 화면 어디서나 끌기 (버튼 없음)
+            _touch = gameObject.AddComponent<TouchControls>();
+            _touch.Init(_root, Art("__round", null, Color.white));
+            _touch.enabled = false;
+
+            // 처음 몇 초 보여 주는 조작 안내
+            _hint = UIFactory.CreateText("ControlHint", _root,
+                "← 좌우로 끌어서 이동 →\n위로 휙 올리면 점프!", 46, TextAnchor.MiddleCenter, Color.white).gameObject;
+            UIFactory.Place((RectTransform)_hint.transform, new Vector2(0.5f, 0f), new Vector2(0, 260), new Vector2(1000, 150));
+            _hint.SetActive(false);
         }
 
         void RefreshMute() => _muteLabel.text = SoundFx.Muted ? "소리\n끔" : "소리\n켬";
-
-        HoldButton MakeHold(string name, string label, Vector2 anchor, Vector2 pos, float size)
-        {
-            var img = UIFactory.CreateImage(name, _controls.transform, Art("__round", null, Color.white), ButtonColor);
-            UIFactory.Place(img.rectTransform, anchor, pos, new Vector2(size, size));
-            var t = UIFactory.CreateText("Label", img.rectTransform, label, (int)(size * 0.32f), TextAnchor.MiddleCenter, Color.white);
-            UIFactory.Stretch(t.rectTransform);
-            return img.gameObject.AddComponent<HoldButton>();
-        }
 
         void UpdateHud()
         {
@@ -523,6 +521,13 @@ namespace MagicTree.Climb
             _toastText.gameObject.SetActive(true);
             yield return new WaitForSeconds(2f);
             _toastText.gameObject.SetActive(false);
+        }
+
+        IEnumerator ShowHint()
+        {
+            _hint.SetActive(true);
+            yield return new WaitForSeconds(4f);
+            _hint.SetActive(false);
         }
 
         // ───────────────────────── 타이틀 / 이야기 ─────────────────────────
@@ -634,7 +639,8 @@ namespace MagicTree.Climb
         void BeginPlay()
         {
             if (_title != null) Destroy(_title);
-            _controls.SetActive(true);
+            _touch.enabled = true;
+            StartCoroutine(ShowHint());
             _playing = true;
             _area = C.AreaFor(_world.Pos.y);
             ShowToast($"~ {C.AreaNames[_area]} ~");
